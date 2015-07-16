@@ -17,6 +17,10 @@
     "types": [
         "informal",
         "formal",
+        "command",
+        "task",
+        "functional",
+        "interest",
         "base"
     ]
 }
