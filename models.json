@@ -1,10 +1,22 @@
-{ leader: { participants: 3, distribution: 80 },
-  argument:
-   { participants: 2,
-     distribution: 50,
-     overtalk: 30,
-     duration: 'short' },
-  'decision-making': {},
-  feedback: {},
-  planning: {}
+{
+    "model": {
+        "argument": {
+            "distribution": 50,
+            "duration": "short",
+            "overtalk": 30,
+            "participants": 2
+        },
+        "decision-making": {},
+        "feedback": {},
+        "leader": {
+            "distribution": 80,
+            "participants": 3
+        },
+        "planning": {}
+    },
+    "types": [
+        "informal",
+        "formal",
+        "base"
+    ]
 }
