@@ -25,4 +25,8 @@ function drawChart() {
         title: 'Talk Time by User',
         legend: { position: 'none' }
     };
+
+    var chart = new google.visualization.Histogram(document.getElementById('chart_div'));
+    chart.draw(data, options);
+
 };
