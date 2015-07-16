@@ -1,0 +1,10 @@
+{ leader: { participants: 3, distribution: 80 },
+  argument:
+   { participants: 2,
+     distribution: 50,
+     overtalk: 30,
+     duration: 'short' },
+  'decision-making': {},
+  feedback: {},
+  planning: {}
+}
