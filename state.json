@@ -81,6 +81,7 @@
             "time": 1437074564
         }
     ],
+    "activity/m": [ 2, 0, 4, 7 ],
     "follows": {
         "user1": {
             "user1": 1,
