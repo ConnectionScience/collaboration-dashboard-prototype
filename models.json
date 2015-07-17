@@ -12,6 +12,9 @@
             "distribution": 80,
             "participants": 3
         },
+        "debate": {},
+        "declamation": {},
+        "negotiation": {},
         "planning": {}
     },
     "types": [

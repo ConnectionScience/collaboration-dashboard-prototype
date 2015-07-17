@@ -1,7 +1,7 @@
 {
     "activity": [
         {
-            "participant": "user",
+            "participant": "user1",
             "time": 1437074511
         },
         {
@@ -82,7 +82,13 @@
         }
     ],
     "activity/m": [ 2, 0, 4, 7 ],
-    "follows": {
+    "participation": [
+        {
+            "user1": 10,
+            "user2": 5,
+            "user3": 5
+        },
+    "responders": {
         "user1": {
             "user1": 1,
             "user2": 4,
@@ -97,13 +103,6 @@
             "user1": 4,
             "user2": 1,
             "user3": 0
-        }
-    },
-    "participation": [
-        {
-            "user1": 10,
-            "user2": 5,
-            "user3": 5
         }
     ]
 }
