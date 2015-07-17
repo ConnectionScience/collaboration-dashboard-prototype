@@ -12,6 +12,10 @@ The sample data is being pulled from:
 - IRC: MediaWiki
 - GitHub: Clojure
 
+# Dashboard 
+
+!["Mockup"](communication-analysis-dashboard.png)
+
 # Other Work
 
 ## Mailing Lists 
