@@ -9,7 +9,9 @@
         "decision-making": {},
         "feedback": {},
         "leader": {
-            "distribution": 80,
+            "distribution": 50,
+            "duration": "medium",
+            "overtalk": 5,
             "participants": 3
         },
         "debate": {},
