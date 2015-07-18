@@ -45,6 +45,20 @@ var path = true;
 var respondersMC = module.exports.CTMC(testnormal, T, start, path);
 // console.log(respondersMC);
 
+var showReplay = function(talker, time) {
+    // console.log('showReplay', talker, time);
+    var notice = 'Talker: -' + talker + '- @ ' + (time / 1000) + 's';
+    document.getElementById('replay').innerHTML =
+        notice
+        .replace("-0-", '<b style="color: blue">0</b>')
+        .replace("-1-", '<b style="color: red">1</b>')
+        .replace("-2-", '<b style="color: orange">2</b>')
+        .replace("-3-", '<b style="color: green">3</b>')
+        .replace("-4-", '<b style="color: purple">4</b>')
+        .replace("-5-", '<b style="color: ">5</b>')
+        .replace("-6-", '<b style="color: ">6</b>');
+};
+
 // talkers: array
 // speaker talk incidents w/o time
 var talkers = [];
@@ -56,16 +70,28 @@ var prev = 0;
 for (var key in respondersMC) {
     var speaker = respondersMC[key];
     // TODO: this has multiple responsibilities
-    // followers
+    // 1. followers
     var curr = speaker;
     followers = followers || {};
     followers[prev] = followers[prev] || {};
     followers[prev][curr] = followers[prev][curr] || 1;
     followers[prev][curr]++;
-    // talkers
+    // 2. talkers
     talkers.push(speaker);
-    timeseries[parseInt(now + 1000 * key)] = respondersMC[key];
+    var ms = 1000 * key;
+    timeseries[parseInt(now + ms)] = respondersMC[key];
+    // 3. replay
+    var timeout = 100 * Math.floor(parseInt(key));
+    setTimeout(
+        function(curr, ms) {
+            // console.log('setTimeout', curr, ms);
+            return function() {
+                showReplay(curr, ms);
+            };
+        }(curr, timeout), timeout);
+
     prev = curr;
+
 }
 // console.log(talkers);
 // console.log(timeseries);
@@ -208,18 +234,4 @@ showFollowers();
 showEvents();
 showModel();
 
-var replay = function() {
-    var talker = '' + talkers.shift();
-    document.getElementById('replay').innerHTML =
-        talker
-        .replace(0, '<b style="color: blue">0</b>')
-        .replace(1, '<b style="color: red">1</b>')
-        .replace(2, '<b style="color: orange">2</b>')
-        .replace(3, '<b style="color: green">3</b>')
-        .replace(4, '<b style="color: purple">4</b>')
-        .replace(5, '<b style="color: ">5</b>')
-        .replace(6, '<b style="color: ">6</b>');
-    if (talkers.length > 0) setTimeout(replay, 100);
-};
-
-replay();
+// replay();
