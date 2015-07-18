@@ -20,7 +20,7 @@ var generateTransitionMatrix = function(n) {
 };
 
 // testnormal: matrix
-var testnormal = generateTransitionMatrix(5);
+var testnormal = generateTransitionMatrix(10);
 
 var transExample= [
     [0.1, 0.4, 0.2, 0.2, 0.1, 0.1], // user0
@@ -92,8 +92,8 @@ var showReplay = function(talker, prev, time) {
         .replace("-2-", '<b style="color: orange">2</b>')
         .replace("-3-", '<b style="color: green">3</b>')
         .replace("-4-", '<b style="color: purple">4</b>')
-        .replace("-5-", '<b style="color: ">5</b>')
-        .replace("-6-", '<b style="color: ">6</b>');
+        .replace("-5-", '<b style="color: teal">5</b>')
+        .replace(/-(\d+)-/, '<b">$1</b>');
 };
 
 
@@ -223,13 +223,13 @@ var showFollowers = function() {
     document.getElementById('followers').innerHTML = JSON
         .stringify(followers)
         .replace(/\},/g, '},\n')
-        .replace(/"0"/g, '"<b style="color: blue">0</b>"')
-        .replace(/"1"/g, '"<b style="color: red">1</b>"')
-        .replace(/"2"/g, '"<b style="color: orange">2</b>"')
-        .replace(/"3"/g, '"<b style="color: green">3</b>"')
-        .replace(/"4"/g, '"<b style="color: purple">4</b>"')
-        .replace(/"5"/g, '"<b style="color: ">5</b>"')
-        .replace(/"6"/g, '"<b style="color: ">6</b>"');
+        .replace(/"0"/g, '<b style="color: blue">0</b>')
+        .replace(/"1"/g, '<b style="color: red">1</b>')
+        .replace(/"2"/g, '<b style="color: orange">2</b>')
+        .replace(/"3"/g, '<b style="color: green">3</b>')
+        .replace(/"4"/g, '<b style="color: purple">4</b>')
+        .replace(/"5"/g, '<b style="color: teal">5</b>')
+        .replace(/\"(\d+)\"/g, '<b>$1</b>');
 };
 
 var showEvents = function(timeseries) {
@@ -241,8 +241,8 @@ var showEvents = function(timeseries) {
         .replace(/:2,/g, ',<b style="color: orange">2</b>,')
         .replace(/:3,/g, ',<b style="color: green">3</b>,')
         .replace(/:4,/g, ',<b style="color: purple">4</b>,')
-        .replace(/:5,/g, ',<b style="color: ">5</b>,')
-        .replace(/:6,/g, ',<b style="color: ">6</b>,');
+        .replace(/:5,/g, ',<b style="color: teal">5</b>,')
+        .replace(/:(\d+),/g, ',<b style="color: ">$1</b>,');
 };
 
 var showModel = function() {
