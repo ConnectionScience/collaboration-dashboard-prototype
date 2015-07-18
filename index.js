@@ -3,9 +3,26 @@ console.log('dashboard-mock');
 // atom for global state
 window.state = {};
 
+// generateTranstionMatrix(): matrix
+// Create an NxN array with even distribution
+var generateTransitionMatrix = function(n) {
+var scaffold = Array
+        .apply(null,
+               Array(n));
+    var row = scaffold
+            .map(Number.prototype.valueOf, 1 / n);
+    var matrix = scaffold
+            .map(function(e, i, c) {
+                return row;
+            });
+
+    return matrix;
+};
 
 // testnormal: matrix
-var testnormal = [
+var testnormal = generateTransitionMatrix(5);
+
+var transExample= [
     [0.1, 0.4, 0.2, 0.2, 0.1, 0.1], // user0
     [0.7, 0.1, 0.1, 0.0, 0.0, 0.1], // user1
     [0.5, 0.3, 0.1, 0.0, 0.0, 0.1],  // user2
@@ -19,7 +36,7 @@ var activityHeader = ['Intermal'].concat(
         return 'user' + i;
     }));
 
-var T = 100;
+var T = 10000;
 var start = 0;
 var path = true;
 
