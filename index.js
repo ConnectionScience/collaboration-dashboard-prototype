@@ -45,8 +45,33 @@ var path = true;
 var respondersMC = module.exports.CTMC(testnormal, T, start, path);
 // console.log(respondersMC);
 
-var showReplay = function(talker, time) {
+state.responders = respondersMC;
+
+
+// talkers: array
+// speaker talk incidents w/o time
+var talkers = [];
+var timeseries = {};
+var now = Date.now();
+var followers = {};
+// initial speaker
+var prev = 0;
+
+// current list of followers
+var deriveFollowers = function(speaker, prev) {
+    var curr = speaker;
+    followers = followers || {};
+    followers[prev] = followers[prev] || {};
+    followers[prev][curr] = followers[prev][curr] || 1;
+    followers[prev][curr]++;
+    showFollowers();
+};
+
+var showReplay = function(talker, prev, time) {
     // console.log('showReplay', talker, time);
+    // TODO: this has multiple responsibilities
+    deriveFollowers(talker, prev);
+
     var notice = 'Talker: -' + talker + '- @ ' + (time / 1000) + 's';
     document.getElementById('replay').innerHTML =
         notice
@@ -59,23 +84,11 @@ var showReplay = function(talker, time) {
         .replace("-6-", '<b style="color: ">6</b>');
 };
 
-// talkers: array
-// speaker talk incidents w/o time
-var talkers = [];
-var timeseries = {};
-var now = Date.now();
-var followers = {};
-// initial speaker
-var prev = 0;
+
 for (var key in respondersMC) {
     var speaker = respondersMC[key];
-    // TODO: this has multiple responsibilities
-    // 1. followers
     var curr = speaker;
-    followers = followers || {};
-    followers[prev] = followers[prev] || {};
-    followers[prev][curr] = followers[prev][curr] || 1;
-    followers[prev][curr]++;
+    // TODO: this has multiple responsibilities
     // 2. talkers
     talkers.push(speaker);
     var ms = 1000 * key;
@@ -83,12 +96,12 @@ for (var key in respondersMC) {
     // 3. replay
     var timeout = 100 * Math.floor(parseInt(key));
     setTimeout(
-        function(curr, ms) {
+        function(curr, prev, ms) {
             // console.log('setTimeout', curr, ms);
             return function() {
-                showReplay(curr, ms);
+                showReplay(curr, prev, ms);
             };
-        }(curr, timeout), timeout);
+        }(curr, prev, timeout), timeout);
 
     prev = curr;
 
