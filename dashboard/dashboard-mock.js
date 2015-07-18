@@ -136,25 +136,39 @@ var speakers = Object.keys(sample)
 
 // activity: data frame
 // activity minutes following the start
+// the data needs to look like
+          // ['Year', 'Sales', 'Expenses'],
+          // ['2004',  1000,      400],
+
 var activity = Object.keys(sample)
         .map(function(e, i, c) {
             var first = c[0];
-            var toSecond = function(d) {
-                return parseInt(d / 1000);
+            // converting to seconds and rolling the buckets isn't
+            // necessary with Google charts: testing other buckets
+            var toBucket = function(d) {
+                return parseInt(d / 10000);
             };
-            return toSecond(e) - toSecond(first);
+            // Transform time to offset and speaker
+            var result = [toBucket(e) - toBucket(first), sample[e]];
+            return result;
         })
-        .reduce(function(p, c, i, a) {
-            p.push([c]);
-            // Collect by time
-            //  p[c] ? p[c][1]++ : p[c] = [c, 1];
-            console.log(c);
-            return p;
+        .reduce(function(a, b) {
+            var offset = parseInt(b[0]);
+            var speaker = parseInt(b[1]);
+            var result = a[offset];
+            if (!result) {
+                result = [offset, 0, 0, 0];
+            }
+            result[speaker + 1]++;
+            console.log(result);
+            a[offset] = result;
+            return a;
         }, [])
-        .filter(function(e) {
+        .filter(function(e, i, c) {
             return e;
         });
-// console.log(activity);
+
+console.log(activity);
 
 var distribution = speakers.reduce(function(p, c, i) {
     p[c] ? p[c]++ : p[c] = 1;
@@ -183,22 +197,17 @@ var drawParticipation = function() {
 };
 
 var drawActivity = function() {
-    var data = new google.visualization.DataTable();
-    data.addColumn('number', 'Time');
-    console.log(activity);
-    data.addRows(activity);
+    var data = google.visualization.arrayToDataTable([
+        ['30 Seconds', 'user0', 'user1', 'user2']
+    ].concat(
+        activity
+    ));
 
     var options = {
-        hAxis: {
-            title: 'Time'
-        },
-        vAxis: {
-            title: 'Volume'
-        }
+        title: 'Speaker Activity',
+        isStacked: true
     };
-
-    var chart = new google.visualization.Histogram(document.getElementById('activity'));
-    console.log(data);
+    var chart = new google.visualization.LineChart(document.getElementById('activity'));
     chart.draw(data, options);
 };
 
