@@ -1,14 +1,13 @@
 <html>
   <head>
-    <title>Communication Analysis Dashboard: Project Name</title>
+    <title>Project Name Dashboard: Communication Analysis</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/css/materialize.min.css">
   </head>
   <body>
 
-
     <nav>
       <div class="nav-wrapper">
-        <a href="#" class="brand-logo">Communication Analysis Dashboard: Project Name</a>
+        <a href="#" class="brand-logo">Dashboard: Project Name</a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
           <li><a href="#reports">Reports</a></li>
           <li><a href="#activity">Activity</a></li>
@@ -16,14 +15,44 @@
       </div>
     </nav>
 
-    <h2>Participation</h2>
-    <div id="participation"></div>
+    <div class="row">
+      <div class="col s6">
+        <h2>Participation</h2>
+        <div id="participation"></div>
+      </div>
+      <div class="col s6">
+        <h2>Activity</h2>
+        <div id="activity"></div>
+      </div>
+    </div>
 
-    <h2>Activity</h2>
-    <div id="activity"></div>
+    <div class="row">
+      <div class="col s6">
+        <h2>Followers</h2>
+        <pre id="followers"></pre>
+      </div>
+      <div class="col s6">
+        <h2>Events</h2>
+        <pre id="events" style="height: 200px; overflow: scroll;"></pre>
 
-    <h2>Followers</h2>
-    <pre id="followers"></pre>
+      </div>
+    </div>
+
+    <footer class="page-footer">
+      <div class="container">
+        <div class="row">
+          <div class="col l6 s12">
+            <h5 class="white-text">Communication Analysis</h5>
+              <p class="grey-text text-lighten-4"></p>
+          </div>
+        </div>
+      </div>
+      <div class="footer-copyright">
+        <div class="container">
+          &copy; 2014 Connection Science
+        </div>
+      </div>
+    </footer>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js"></script>

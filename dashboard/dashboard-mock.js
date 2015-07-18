@@ -1,6 +1,6 @@
 console.log('dashboard-mock');
 
-var events = setInterval(function() {
+var eventsInternal = setInterval(function() {
     var event = {
         user: 'user' + Math.floor(Math.random() * 3),
         date: (new Date()),
@@ -140,10 +140,23 @@ var drawActivity = function() {
 var showFollowers = function() {
     document.getElementById('followers').innerHTML = JSON
         .stringify(followers)
-        .replace(/\},/g, '},\n');
+        .replace(/\},/g, '},\n')
+        .replace(/"0"/g, '"<b style="color: blue">0</b>"')
+        .replace(/"1"/g, '"<b style="color: red">1</b>"')
+        .replace(/"2"/g, '"<b style="color: orange">2</b>"');
+};
+
+var showEvents = function() {
+    document.getElementById('events').innerHTML = JSON
+        .stringify(timeseries)
+        .replace(/,/g, ',\n')
+        .replace(/:0,/g, ',<b style="color: blue">0</b>,')
+        .replace(/:1,/g, ',<b style="color: red">1</b>,')
+        .replace(/:2,/g, ',<b style="color: orange">2</b>,');
 };
 
 // Rendering
 google.setOnLoadCallback(drawParticipation);
 google.setOnLoadCallback(drawActivity);
 showFollowers();
+showEvents();
