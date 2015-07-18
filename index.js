@@ -15,10 +15,16 @@ var eventsInternal = setInterval(function() {
 
 // testnormal: matrix
 var testnormal = [
-    [0.1, 0.5, 0.4], // user1
-    [0.8, 0.1, 0.1], // user2
-    [0.6, 0.3, 0.1]  // user3
+    [0.1, 0.5, 0.2, 0.2], // user0
+    [0.8, 0.1, 0.1, 0.0], // user1
+    [0.6, 0.3, 0.1, 0.0],  // user3
+    [0.5, 0.5, 0.0, 0.0]  // user3
 ];
+
+var activityHeader = ['Intermal'].concat(
+    testnormal.map(function(e, i, c) {
+        return 'user' + i;
+    }));
 
 var T = 100;
 var start = 0;
@@ -86,7 +92,13 @@ var activity = Object.keys(sample)
             var speaker = parseInt(b[1]);
             var result = a[offset];
             if (!result) {
-                result = [offset, 0, 0, 0];
+                // 0 populated array
+                var initial = Array
+                        .apply(null,
+                               Array(testnormal.length))
+                        .map(Number.prototype.valueOf,0);
+                result = [offset].concat(initial);
+                console.log(initial);
             }
             result[speaker + 1]++;
             // console.log(result);
@@ -127,7 +139,7 @@ var drawParticipation = function() {
 
 var drawActivity = function() {
     var data = google.visualization.arrayToDataTable([
-        ['30 Seconds', 'user0', 'user1', 'user2']
+        activityHeader
     ].concat(
         activity
     ));
@@ -146,7 +158,8 @@ var showFollowers = function() {
         .replace(/\},/g, '},\n')
         .replace(/"0"/g, '"<b style="color: blue">0</b>"')
         .replace(/"1"/g, '"<b style="color: red">1</b>"')
-        .replace(/"2"/g, '"<b style="color: orange">2</b>"');
+        .replace(/"2"/g, '"<b style="color: orange">2</b>"')
+        .replace(/"3"/g, '"<b style="color: green">3</b>"');
 };
 
 var showEvents = function() {
@@ -155,7 +168,8 @@ var showEvents = function() {
         .replace(/,/g, ',\n')
         .replace(/:0,/g, ',<b style="color: blue">0</b>,')
         .replace(/:1,/g, ',<b style="color: red">1</b>,')
-        .replace(/:2,/g, ',<b style="color: orange">2</b>,');
+        .replace(/:2,/g, ',<b style="color: orange">2</b>,')
+        .replace(/:3,/g, ',<b style="color: green">3</b>,');
 };
 
 // Rendering
