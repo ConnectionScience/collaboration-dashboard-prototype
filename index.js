@@ -238,13 +238,13 @@ var showEvents = function(timeseries) {
     document.getElementById('events').innerHTML = JSON
         .stringify(timeseries)
         .replace(/,/g, ',\n')
-        .replace(/:0,/g, ',<b style="color: blue">0</b>,')
-        .replace(/:1,/g, ',<b style="color: red">1</b>,')
-        .replace(/:2,/g, ',<b style="color: orange">2</b>,')
-        .replace(/:3,/g, ',<b style="color: green">3</b>,')
-        .replace(/:4,/g, ',<b style="color: purple">4</b>,')
-        .replace(/:5,/g, ',<b style="color: teal">5</b>,')
-        .replace(/:(\d+),/g, ',<b style="color: ">$1</b>,');
+        .replace(/:0,/g, ':<b style="color: blue">0</b>,')
+        .replace(/:1,/g, ':<b style="color: red">1</b>,')
+        .replace(/:2,/g, ':<b style="color: orange">2</b>,')
+        .replace(/:3,/g, ':<b style="color: green">3</b>,')
+        .replace(/:4,/g, ':<b style="color: purple">4</b>,')
+        .replace(/:5,/g, ':<b style="color: teal">5</b>,')
+        .replace(/:(\d+),/g, ':<b style="color: ">$1</b>,');
 };
 
 var showModel = function() {
