@@ -22,13 +22,16 @@
     <h2>Activity</h2>
     <div id="activity"></div>
 
-    <h2>Follows</h2>
-    <div id="follows"></div>
-
+    <h2>Followers</h2>
+    <pre id="followers"></pre>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js"></script>
     <script src="https://www.google.com/jsapi"></script>
+    <script>
+      window.module = {exports: {}};
+    </script>
+    <script src="../node_modules/stochastic/index.js"></script>
     <script src="dashboard-mock.js"></script>
   </body>
 </html>
