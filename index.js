@@ -1,5 +1,8 @@
 console.log('dashboard-mock');
 
+// atom for global state
+window.state = {};
+
 var eventsInternal = setInterval(function() {
     var event = {
         user: 'user' + Math.floor(Math.random() * 3),

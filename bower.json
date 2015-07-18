@@ -1,0 +1,21 @@
+{
+  "name": "Communication Models",
+  "version": "0.0.0",
+  "homepage": "https://github.com/ConnectionScience/communication-model",
+  "authors": [
+    "Jason Walsh <j@wal.sh>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bacon": "~0.7.70",
+    "materialize": "~0.97.0",
+    "react": "~0.13.3"
+  }
+}
