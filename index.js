@@ -2,13 +2,13 @@ console.log('dashboard-mock');
 
 // atom for global state
 window.state = {};
-
+window.googleLoaded = false;
 // generateTranstionMatrix(): matrix
 // Create an NxN array with even distribution
 var generateTransitionMatrix = function(n) {
-var scaffold = Array
-        .apply(null,
-               Array(n));
+    var scaffold = Array
+            .apply(null,
+                   Array(n));
     var row = scaffold
             .map(Number.prototype.valueOf, 1 / n);
     var matrix = scaffold
@@ -39,7 +39,7 @@ var activityHeader = ['Intermal'].concat(
 var T = 10000;
 var start = 0;
 var path = true;
-
+var distributionFrames;
 // respondersMC: object
 // time and speaker
 var respondersMC = module.exports.CTMC(testnormal, T, start, path);
@@ -71,6 +71,18 @@ var showReplay = function(talker, prev, time) {
     // console.log('showReplay', talker, time);
     // TODO: this has multiple responsibilities
     deriveFollowers(talker, prev);
+    // 2. talkers
+    talkers.push(speaker);
+    // 3. timeseries
+    timeseries[time] = talker;
+
+
+    showFollowers();
+    showEvents(timeseries);
+    updateTimeseries();
+
+    if (googleLoaded) drawParticipation(distributionFrames);
+    if (googleLoaded) drawActivity(activity);
 
     var notice = 'Talker: -' + talker + '- @ ' + (time / 1000) + 's';
     document.getElementById('replay').innerHTML =
@@ -89,10 +101,6 @@ for (var key in respondersMC) {
     var speaker = respondersMC[key];
     var curr = speaker;
     // TODO: this has multiple responsibilities
-    // 2. talkers
-    talkers.push(speaker);
-    var ms = 1000 * key;
-    timeseries[parseInt(now + ms)] = respondersMC[key];
     // 3. replay
     var timeout = 100 * Math.floor(parseInt(key));
     setTimeout(
@@ -106,74 +114,78 @@ for (var key in respondersMC) {
     prev = curr;
 
 }
-// console.log(talkers);
-// console.log(timeseries);
 
-var sample = timeseries;
+var updateTimeseries = function() {
 
-// speakers: array
-// speaker incidents
-var speakers = Object.keys(sample)
-        .map(function(e, i, c) {
-            return sample[e];
-        });
-// console.log(speakers);
+    // console.log(talkers);
+    // console.log(timeseries);
+    var sample = timeseries;
 
-// activity: data frame
-// activity minutes following the start
-// the data needs to look like
-// ['Year', 'Sales', 'Expenses'],
-// ['2004',  1000,      400],
-var activity = Object.keys(sample)
-        .map(function(e, i, c) {
-            var first = c[0];
-            // converting to seconds and rolling the buckets isn't
-            // necessary with Google charts: testing other buckets
-            var toBucket = function(d) {
-                return parseInt(d / 10000);
-            };
-            // Transform time to offset and speaker
-            var result = [toBucket(e) - toBucket(first), sample[e]];
-            return result;
-        })
-        .reduce(function(a, b) {
-            var offset = parseInt(b[0]);
-            var speaker = parseInt(b[1]);
-            var result = a[offset];
-            if (!result) {
-                // 0 populated array
-                var initial = Array
-                        .apply(null,
-                               Array(testnormal.length))
-                        .map(Number.prototype.valueOf,0);
-                result = [offset].concat(initial);
-            }
-            result[speaker + 1]++;
-            // console.log(result);
-            a[offset] = result;
-            return a;
-        }, [])
-        .filter(function(e, i, c) {
-            return e;
-        });
+    // speakers: array
+    // speaker incidents
+    var speakers = Object.keys(sample)
+            .map(function(e, i, c) {
+                return sample[e];
+            });
+    // console.log(speakers);
 
-// console.log(activity);
+    // activity: data frame
+    // activity minutes following the start
+    // the data needs to look like
+    // ['Year', 'Sales', 'Expenses'],
+    // ['2004',  1000,      400],
+    window.activity = Object.keys(sample)
+            .map(function(e, i, c) {
+                var first = c[0];
+                // converting to seconds and rolling the buckets isn't
+                // necessary with Google charts: testing other buckets
+                var toBucket = function(d) {
+                    return parseInt(d / 1000);
+                };
+                // Transform time to offset and speaker
+                var result = [toBucket(e) - toBucket(first), sample[e]];
+                return result;
+            })
+            .reduce(function(a, b) {
+                var offset = parseInt(b[0]);
+                var speaker = parseInt(b[1]);
+                var result = a[offset];
+                if (!result) {
+                    // 0 populated array
+                    var initial = Array
+                            .apply(null,
+                                   Array(testnormal.length))
+                            .map(Number.prototype.valueOf,0);
+                    result = [offset].concat(initial);
+                }
+                result[speaker + 1]++;
+                // console.log(result);
+                a[offset] = result;
+                return a;
+            }, [])
+            .filter(function(e, i, c) {
+                return e;
+            });
 
-var distribution = speakers.reduce(function(p, c, i) {
-    p[c] ? p[c]++ : p[c] = 1;
-    return p;
-}, {});
-// console.log(distribution);
+    // console.log(activity);
 
-var distributionFrames = Object.keys(distribution)
+    var distribution = speakers.reduce(function(p, c, i) {
+        p[c] ? p[c]++ : p[c] = 1;
+        return p;
+    }, {});
+    // console.log(distribution);
+
+    window.distributionFrames = Object.keys(distribution)
         .map(function(e, i, c) {
             return ['user' + e, distribution[e]];
         });
-// console.log(distributionFrames);
+    console.log(distributionFrames);
+
+};
 
 google.load("visualization", "1", {packages:["corechart", "line"]});
 
-var drawParticipation = function() {
+var drawParticipation = function(distributionFrames) {
     var data = google.visualization.arrayToDataTable([
         ['User', 'Talking']
     ].concat(distributionFrames));
@@ -181,11 +193,11 @@ var drawParticipation = function() {
         title: 'Talk Time by User'
     };
     // Histogram
-    var chart = new google.visualization.PieChart(document.getElementById('participation'));
-    chart.draw(data, options);
+    participationChart.draw(data, options);
 };
 
-var drawActivity = function() {
+
+var drawActivity = function(activity) {
     var data = google.visualization.arrayToDataTable([
         activityHeader
     ].concat(
@@ -196,8 +208,7 @@ var drawActivity = function() {
         title: 'Speaker Activity',
         isStacked: true
     };
-    var chart = new google.visualization.LineChart(document.getElementById('activity'));
-    chart.draw(data, options);
+    activityChart.draw(data, options);
 };
 
 var colorMap = {
@@ -221,7 +232,7 @@ var showFollowers = function() {
         .replace(/"6"/g, '"<b style="color: ">6</b>"');
 };
 
-var showEvents = function() {
+var showEvents = function(timeseries) {
     document.getElementById('events').innerHTML = JSON
         .stringify(timeseries)
         .replace(/,/g, ',\n')
@@ -241,10 +252,13 @@ var showModel = function() {
 };
 
 // Rendering
-google.setOnLoadCallback(drawParticipation);
-google.setOnLoadCallback(drawActivity);
+google.setOnLoadCallback(function() {
+    window.googleLoaded = true;
+    window.activityChart = new google.visualization.ScatterChart(document.getElementById('activity'));
+    window.participationChart = new google.visualization.PieChart(document.getElementById('participation'));
+});
 showFollowers();
-showEvents();
+showEvents(timeseries);
 showModel();
 
 // replay();
