@@ -3,22 +3,15 @@ console.log('dashboard-mock');
 // atom for global state
 window.state = {};
 
-var eventsInternal = setInterval(function() {
-    var event = {
-        user: 'user' + Math.floor(Math.random() * 3),
-        date: (new Date()),
-        type: 'talk'
-    };
-    console.log(event);
-}, 1000000 * Math.random());
-
 
 // testnormal: matrix
 var testnormal = [
-    [0.1, 0.5, 0.2, 0.2], // user0
-    [0.8, 0.1, 0.1, 0.0], // user1
-    [0.6, 0.3, 0.1, 0.0],  // user3
-    [0.5, 0.5, 0.0, 0.0]  // user3
+    [0.1, 0.4, 0.2, 0.2, 0.1, 0.1], // user0
+    [0.7, 0.1, 0.1, 0.0, 0.0, 0.1], // user1
+    [0.5, 0.3, 0.1, 0.0, 0.0, 0.1],  // user2
+    [0.5, 0.5, 0.0, 0.0, 0.0, 0.0],  // user3
+    [0.5, 0.5, 0.0, 0.0, 0.0, 0.0],  // user4
+    [1.0, 0.0, 0.0, 0.0, 0.0, 0.0]  // user5
 ];
 
 var activityHeader = ['Intermal'].concat(
@@ -98,7 +91,6 @@ var activity = Object.keys(sample)
                                Array(testnormal.length))
                         .map(Number.prototype.valueOf,0);
                 result = [offset].concat(initial);
-                console.log(initial);
             }
             result[speaker + 1]++;
             // console.log(result);
@@ -152,6 +144,14 @@ var drawActivity = function() {
     chart.draw(data, options);
 };
 
+var colorMap = {
+    "0" : "blue",
+    "1" : "red",
+    "2" : "orange",
+    "3" : "green",
+    "4" : "purple"
+};
+
 var showFollowers = function() {
     document.getElementById('followers').innerHTML = JSON
         .stringify(followers)
@@ -159,7 +159,10 @@ var showFollowers = function() {
         .replace(/"0"/g, '"<b style="color: blue">0</b>"')
         .replace(/"1"/g, '"<b style="color: red">1</b>"')
         .replace(/"2"/g, '"<b style="color: orange">2</b>"')
-        .replace(/"3"/g, '"<b style="color: green">3</b>"');
+        .replace(/"3"/g, '"<b style="color: green">3</b>"')
+        .replace(/"4"/g, '"<b style="color: purple">4</b>"')
+        .replace(/"5"/g, '"<b style="color: ">5</b>"')
+        .replace(/"6"/g, '"<b style="color: ">6</b>"');
 };
 
 var showEvents = function() {
@@ -169,7 +172,16 @@ var showEvents = function() {
         .replace(/:0,/g, ',<b style="color: blue">0</b>,')
         .replace(/:1,/g, ',<b style="color: red">1</b>,')
         .replace(/:2,/g, ',<b style="color: orange">2</b>,')
-        .replace(/:3,/g, ',<b style="color: green">3</b>,');
+        .replace(/:3,/g, ',<b style="color: green">3</b>,')
+        .replace(/:4,/g, ',<b style="color: purple">4</b>,')
+        .replace(/:5,/g, ',<b style="color: ">5</b>,')
+        .replace(/:6,/g, ',<b style="color: ">6</b>,');
+};
+
+var showModel = function() {
+    document.getElementById('model').innerHTML = JSON
+        .stringify(testnormal)
+        .replace(/],/g, '],\n');
 };
 
 // Rendering
@@ -177,3 +189,20 @@ google.setOnLoadCallback(drawParticipation);
 google.setOnLoadCallback(drawActivity);
 showFollowers();
 showEvents();
+showModel();
+
+var replay = function() {
+    var talker = '' + talkers.shift();
+    document.getElementById('replay').innerHTML =
+        talker
+        .replace(0, '<b style="color: blue">0</b>')
+        .replace(1, '<b style="color: red">1</b>')
+        .replace(2, '<b style="color: orange">2</b>')
+        .replace(3, '<b style="color: green">3</b>')
+        .replace(4, '<b style="color: purple">4</b>')
+        .replace(5, '<b style="color: ">5</b>')
+        .replace(6, '<b style="color: ">6</b>');
+    if (talkers.length > 0) setTimeout(replay, 100);
+};
+
+replay();
