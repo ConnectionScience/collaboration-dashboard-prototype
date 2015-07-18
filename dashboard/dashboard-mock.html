@@ -1,7 +1,7 @@
 <html>
   <head>
     <title>Communication Analysis Dashboard: Project Name</title>
-    <link rel="stylesheet" href="https://wal.sh/static/css/global.css" type="text/css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/css/materialize.min.css">
   </head>
   <body>
 
@@ -10,31 +10,25 @@
       <div class="nav-wrapper">
         <a href="#" class="brand-logo">Communication Analysis Dashboard: Project Name</a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
-          <li><a href="sass.html">Reports</a></li>
-          <li><a href="badges.html">Activity</a></li>
-          <li><a href="collapsible.html">Projects</a></li>
+          <li><a href="#reports">Reports</a></li>
+          <li><a href="#activity">Activity</a></li>
         </ul>
       </div>
     </nav>
 
-    <!-- <div class="collection"> -->
-    <!--   <a href="#!" class="collection-item">user1<span class="new badge">4</span></a> -->
-    <!--   <a href="#!" class="collection-item">use1<span class="badge">1</span></a> -->
-    <!-- </div> -->
+    <h2>Participation</h2>
+    <div id="participation"></div>
 
-    <histogram>
-      <div id="chart_div" style="width: 900px; height: 500px;"></div>
-    </histogram>
+    <h2>Activity</h2>
+    <div id="activity"></div>
 
-    <timeseries>
-      <table id="activity" width="400">
-      </table>
-    </timeseries>
+    <h2>Follows</h2>
+    <div id="follows"></div>
 
-    <scatter>
-    </scatter>
 
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js"></script>
+    <script src="https://www.google.com/jsapi"></script>
     <script src="dashboard-mock.js"></script>
   </body>
 </html>
