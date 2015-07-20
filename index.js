@@ -19,6 +19,10 @@ var generateTransitionMatrix = function(n) {
     return matrix;
 };
 
+var transSingle = [
+    [1.0]
+];
+
 var transExample= [
     [0.1, 0.4, 0.2, 0.2, 0.1, 0.1], // user0
     [0.7, 0.1, 0.1, 0.0, 0.0, 0.1], // user1
@@ -30,7 +34,8 @@ var transExample= [
 
 // testnormal: matrix
 //  generateTransitionMatrix(10);
-var testnormal = transExample;
+// transExample;
+var testnormal = transSingle;
 
 
 var activityHeader = ['Intermal'].concat(
