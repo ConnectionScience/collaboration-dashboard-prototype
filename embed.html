@@ -1,0 +1,55 @@
+<html>
+  <head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="bower_components/materialize/dist/css/materialize.min.css">
+  </head>
+  <body>
+
+
+    <div class="row">
+      <div class="col s6">
+        <h2>Participation</h2>
+        <div id="participation"></div>
+      </div>
+      <div class="col s6">
+        <h2>Activity</h2>
+        <div id="activity"></div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col s6">
+        <h2>Followers</h2>
+        <pre id="followers"></pre>
+      </div>
+      <div class="col s6">
+        <h2>Replay</h2>
+        <pre id="replay"></pre>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col s6">
+        <h2>Model</h2>
+        <div id="models"></div>
+        <pre id="model"></pre>
+      </div>
+      <div class="col s6">
+        <h2>Events</h2>
+        <pre id="events" style="height: 200px; overflow: scroll;"></pre>
+      </div>
+    </div>
+
+
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/materialize/dist/js/materialize.min.js"></script>
+    <script src="bower_components/querystring/querystring.min.js"></script>
+    <script src="https://www.google.com/jsapi"></script>
+    <script>
+      window.module = {exports: {}};
+    </script>
+    <script src="node_modules/stochastic/index.js"></script>
+    <script src="index.js"></script>
+
+  </body>
+</html>

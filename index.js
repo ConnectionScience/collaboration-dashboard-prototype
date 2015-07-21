@@ -3,6 +3,7 @@ console.log('dashboard-mock');
 // atom for global state
 window.state = {};
 window.googleLoaded = false;
+
 // generateTranstionMatrix(): matrix
 // Create an NxN array with even distribution
 var generateTransitionMatrix = function(n) {
@@ -38,18 +39,19 @@ var models = {
     ten: generateTransitionMatrix(10)
 };
 
-var model = models.leader;
+var active = 'leader';
+var model = models[active];
 var query = querystring.parse(location.search);
-console.log(query);
-if (query.model && models[query.model]) {
-    model = models[query.model];
+if (query.model && models) {
+    active = query.model;
+    model = models[active];
 }
 
 // transitionMatrix: matrix
 var transitionMatrix = model;
-
+// console.log(model);
 var modelHTML = Object.keys(models).reduce(function(a, b) {
-    if (model == b) {
+    if (active == b) {
         a += '<b>' + b + '</b>, ';
     } else {
         a += '<a href="?&model=' + b + '">' + b + '</a>, ';
