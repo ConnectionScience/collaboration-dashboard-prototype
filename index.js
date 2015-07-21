@@ -15,28 +15,46 @@ var generateTransitionMatrix = function(n) {
             .map(function(e, i, c) {
                 return row;
             });
-
     return matrix;
 };
 
-var transSingle = [
-    [1.0]
-];
+var models = {
 
-var transExample= [
-    [0.1, 0.4, 0.2, 0.2, 0.1, 0.1], // user0
-    [0.7, 0.1, 0.1, 0.0, 0.0, 0.1], // user1
-    [0.5, 0.3, 0.1, 0.0, 0.0, 0.1],  // user2
-    [0.5, 0.5, 0.0, 0.0, 0.0, 0.0],  // user3
-    [0.5, 0.5, 0.0, 0.0, 0.0, 0.0],  // user4
-    [1.0, 0.0, 0.0, 0.0, 0.0, 0.0]  // user5
-];
+    transSingle: [
+        [1.0]
+    ],
+    leader: [
+        [0.1, 0.4, 0.2, 0.2, 0.1, 0.1], // user0
+        [0.7, 0.1, 0.1, 0.0, 0.0, 0.1], // user1
+        [0.5, 0.3, 0.1, 0.0, 0.0, 0.1], // user2
+        [0.5, 0.5, 0.0, 0.0, 0.0, 0.0], // user3
+        [0.5, 0.5, 0.0, 0.0, 0.0, 0.0], // user4
+        [1.0, 0.0, 0.0, 0.0, 0.0, 0.0]  // user5
+    ],
+    ten: generateTransitionMatrix(10),
+    five: generateTransitionMatrix(5)
+};
+
+var model = models.leader;
+var query = querystring.parse(location.search);
+console.log(query);
+if (query.model) {
+    model = models[query.model];
+}
 
 // testnormal: matrix
-//  generateTransitionMatrix(10);
-// transExample;
-var testnormal = transSingle;
+var testnormal = model;
 
+var modelHTML = Object.keys(models).reduce(function(a, b) {
+    if (query.model == b) {
+        a += '<b>' + b + '</b>, ';
+    } else {
+        a += '<a href="?&model=' + b + '">' + b + '</a>, ';
+    }
+    return a;
+}, 'Select: ');
+
+document.getElementById('models').innerHTML = modelHTML;
 
 var activityHeader = ['Intermal'].concat(
     testnormal.map(function(e, i, c) {
@@ -53,7 +71,6 @@ var respondersMC = module.exports.CTMC(testnormal, T, start, path);
 // console.log(respondersMC);
 
 state.responders = respondersMC;
-
 
 // talkers: array
 // speaker talk incidents w/o time
@@ -186,7 +203,7 @@ var updateTimeseries = function() {
         .map(function(e, i, c) {
             return ['user' + e, distribution[e]];
         });
-    console.log(distributionFrames);
+    //    console.log(distributionFrames);
 
 };
 
