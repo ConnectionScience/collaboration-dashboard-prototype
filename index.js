@@ -49,7 +49,7 @@ if (query.model && models[query.model]) {
 var transitionMatrix = model;
 
 var modelHTML = Object.keys(models).reduce(function(a, b) {
-    if (query.model == b) {
+    if (model == b) {
         a += '<b>' + b + '</b>, ';
     } else {
         a += '<a href="?&model=' + b + '">' + b + '</a>, ';
