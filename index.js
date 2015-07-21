@@ -19,10 +19,6 @@ var generateTransitionMatrix = function(n) {
 };
 
 var models = {
-
-    transSingle: [
-        [1.0]
-    ],
     leader: [
         [0.1, 0.4, 0.2, 0.2, 0.1, 0.1], // user0
         [0.7, 0.1, 0.1, 0.0, 0.0, 0.1], // user1
@@ -31,19 +27,26 @@ var models = {
         [0.5, 0.5, 0.0, 0.0, 0.0, 0.0], // user4
         [1.0, 0.0, 0.0, 0.0, 0.0, 0.0]  // user5
     ],
-    ten: generateTransitionMatrix(10),
-    five: generateTransitionMatrix(5)
+    alone: [
+        [1.0]
+    ],
+    two: [
+        [0.1, 0.9],
+        [0.5, 0.5]
+    ],
+    five: generateTransitionMatrix(5),
+    ten: generateTransitionMatrix(10)
 };
 
 var model = models.leader;
 var query = querystring.parse(location.search);
 console.log(query);
-if (query.model) {
+if (query.model && models[query.model]) {
     model = models[query.model];
 }
 
-// testnormal: matrix
-var testnormal = model;
+// transitionMatrix: matrix
+var transitionMatrix = model;
 
 var modelHTML = Object.keys(models).reduce(function(a, b) {
     if (query.model == b) {
@@ -57,7 +60,7 @@ var modelHTML = Object.keys(models).reduce(function(a, b) {
 document.getElementById('models').innerHTML = modelHTML;
 
 var activityHeader = ['Intermal'].concat(
-    testnormal.map(function(e, i, c) {
+    transitionMatrix.map(function(e, i, c) {
         return 'user' + i;
     }));
 
@@ -67,7 +70,7 @@ var path = true;
 var distributionFrames;
 // respondersMC: object
 // time and speaker
-var respondersMC = module.exports.CTMC(testnormal, T, start, path);
+var respondersMC = module.exports.CTMC(transitionMatrix, T, start, path);
 // console.log(respondersMC);
 
 state.responders = respondersMC;
@@ -178,7 +181,7 @@ var updateTimeseries = function() {
                     // 0 populated array
                     var initial = Array
                             .apply(null,
-                                   Array(testnormal.length))
+                                   Array(transitionMatrix.length))
                             .map(Number.prototype.valueOf,0);
                     result = [offset].concat(initial);
                 }
@@ -271,7 +274,7 @@ var showEvents = function(timeseries) {
 
 var showModel = function() {
     document.getElementById('model').innerHTML = JSON
-        .stringify(testnormal)
+        .stringify(transitionMatrix)
         .replace(/],/g, '],\n');
 };
 
