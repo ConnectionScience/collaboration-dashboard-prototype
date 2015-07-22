@@ -17,6 +17,7 @@
     "bacon": "~0.7.70",
     "materialize": "~0.97.0",
     "react": "~0.13.3",
-    "querystring": "~3.46.1"
+    "querystring": "~3.46.1",
+    "easyxdm": "~2.4.19"
   }
 }

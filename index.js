@@ -4,6 +4,10 @@ console.log('dashboard-mock');
 window.state = {};
 window.googleLoaded = false;
 
+window.onmessage = function(e){
+    console.log(e);
+};
+
 // generateTranstionMatrix(): matrix
 // Create an NxN array with even distribution
 var generateTransitionMatrix = function(n) {
@@ -36,7 +40,8 @@ var models = {
         [0.5, 0.5]
     ],
     five: generateTransitionMatrix(5),
-    ten: generateTransitionMatrix(10)
+    ten: generateTransitionMatrix(10),
+    live: []
 };
 
 var active = 'leader';
@@ -72,8 +77,11 @@ var path = true;
 var distributionFrames;
 // respondersMC: object
 // time and speaker
-var respondersMC = module.exports.CTMC(transitionMatrix, T, start, path);
-// console.log(respondersMC);
+
+if (active !== 'live') {
+    var respondersMC = module.exports.CTMC(transitionMatrix, T, start, path);
+    // console.log(respondersMC);
+}
 
 state.responders = respondersMC;
 
