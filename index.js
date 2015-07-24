@@ -109,6 +109,7 @@ var showReplay = function(talker, prev, time) {
     showFollowers();
     showEvents(timeseries);
     updateTimeseries();
+    showHerfindahl();
 
     if (googleLoaded) drawParticipation(distributionFrames);
     if (googleLoaded) drawActivity(activity);
@@ -210,9 +211,37 @@ var updateTimeseries = function() {
         });
     //    console.log(distributionFrames);
 
+    //    window.participationCount =
+
 };
 
 google.load("visualization", "1", {packages:["corechart", "line"]});
+
+// https://en.wikipedia.org/wiki/Herfindahl_index
+var showHerfindahl = function() {
+    // Sum of all talk events
+    var sum = distributionFrames.reduce(function(a, b) {
+        return a + b[1];
+    }, 0);
+    var herfindahlIndex = distributionFrames.reduce(function(a, b) {
+        return a + Math.pow((b[1] / sum), 2);
+    }, 0);
+    var herfindahl = document.getElementById('index');
+    // Invert to get an actionable score
+    // Higher = more inequality
+    herfindahl.innerHTML = '<b>Index</b>: ' + herfindahlIndex.toFixed(2);
+
+    // Purely cooperative Herfindahl index of n participants
+    // This is the lowest possible score
+    var n = distributionFrames.length;
+    var coop = n * Math.pow((1 / n), 2);
+    var deviation = document.getElementById('deviation');
+    deviation.innerHTML = '<b>Deviation</b>: ' +
+        (herfindahlIndex - coop).toFixed(2) +
+         ' (collaborative = ' + coop.toFixed(2) + ')';
+
+};
+
 
 var drawParticipation = function(distributionFrames) {
     var data = google.visualization.arrayToDataTable([
