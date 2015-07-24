@@ -240,10 +240,10 @@ var drawInequality = function() {
       herfindahlIndex.toFixed(2);
 
   var n = distributionFrames.length;
-    var herfindahlNormalized = (herfindahlIndex - 1 / n) / ( 1 - 1 / n);
-    // TODO: s/normalized/nomalised/
-    var normalized = document.getElementById('normalized');
-    normalized.innerHTML = '<b>Normalised Herfindahl Index</b>: ' +
+  var herfindahlNormalized = (herfindahlIndex - 1 / n) / (1 - 1 / n);
+  // TODO: s/normalized/nomalised/
+  var normalized = document.getElementById('normalized');
+  normalized.innerHTML = '<b>Normalised Herfindahl Index</b>: ' +
       herfindahlNormalized.toFixed(2);
 
   // Purely cooperative Herfindahl index of n participants
