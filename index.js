@@ -49,7 +49,7 @@ var models = {
 var active = 'leader';
 var model = models[active];
 var query = querystring.parse(location.search);
-if (query.model && models) {
+if (query.model && models && models[query.model]) {
     active = query.model;
     model = models[active];
 }
@@ -68,7 +68,7 @@ var modelHTML = Object.keys(models).reduce(function(a, b) {
 
 document.getElementById('models').innerHTML = modelHTML;
 
-var activityHeader = ['Intermal'].concat(
+var activityHeader = ['Internal'].concat(
     transitionMatrix.map(function(e, i, c) {
         return 'user' + i;
     }));
@@ -116,10 +116,10 @@ var showReplay = function(talker, prev, time) {
     showFollowers();
     showEvents(timeseries);
     updateTimeseries();
-    showHerfindahl();
 
     if (googleLoaded) drawParticipation(distributionFrames);
     if (googleLoaded) drawActivity(activity);
+    if (googleLoaded) drawInequality();
 
     var notice = 'Talker: -' + talker + '- @ ' + (time / 1000) + 's';
     document.getElementById('replay').innerHTML =
@@ -225,7 +225,7 @@ var updateTimeseries = function() {
 google.load("visualization", "1", {packages:["corechart", "line"]});
 
 // https://en.wikipedia.org/wiki/Herfindahl_index
-var showHerfindahl = function() {
+var drawInequality = function() {
     // Sum of all talk events
     var sum = distributionFrames.reduce(function(a, b) {
         return a + b[1];
@@ -236,7 +236,7 @@ var showHerfindahl = function() {
     var herfindahl = document.getElementById('index');
     // Invert to get an actionable score
     // Higher = more inequality
-    herfindahl.innerHTML = '<b>Index</b>: ' + herfindahlIndex.toFixed(2);
+    herfindahl.innerHTML = '<b>Herfindahl Index</b>: ' + herfindahlIndex.toFixed(2);
 
     // Purely cooperative Herfindahl index of n participants
     // This is the lowest possible score
@@ -246,6 +246,18 @@ var showHerfindahl = function() {
     deviation.innerHTML = '<b>Deviation</b>: ' +
         (herfindahlIndex - coop).toFixed(2) +
          ' (collaborative = ' + coop.toFixed(2) + ')';
+
+    var data = google.visualization.arrayToDataTable([
+        ['Equality', 'Score'],
+        ['Monopolization',     1 - herfindahlIndex],
+        ['Participation',      herfindahlIndex]
+    ]);
+
+    var options = {
+        pieHole: 0.8,
+        legend: 'none'
+    };
+    inequalityChart.draw(data, options);
 
 };
 
@@ -321,6 +333,7 @@ google.setOnLoadCallback(function() {
     window.googleLoaded = true;
     window.activityChart = new google.visualization.ScatterChart(document.getElementById('activity'));
     window.participationChart = new google.visualization.PieChart(document.getElementById('participation'));
+    window.inequalityChart = new google.visualization.PieChart(document.getElementById('inequality'));
 });
 showFollowers();
 showEvents(timeseries);
