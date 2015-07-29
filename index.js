@@ -233,6 +233,7 @@ var drawInequality = function() {
   var herfindahlIndex = distributionFrames.reduce(function(a, b) {
     return a + Math.pow((b[1] / sum), 2);
   }, 0);
+
   var herfindahl = document.getElementById('index');
   // Invert to get an actionable score
   // Higher = more inequality
@@ -245,6 +246,24 @@ var drawInequality = function() {
   var normalized = document.getElementById('normalized');
   normalized.innerHTML = '<b>Normalised Herfindahl Index</b>: ' +
       herfindahlNormalized.toFixed(2);
+
+    var collaboration = document.getElementById('collaboration');
+    var score = 'unknown';
+    // excellent
+    if (herfindahlNormalized < .05) {
+        score = 'excellent'.fontcolor('green');
+    } else if (herfindahlNormalized < .1) {
+        score = 'good'.fontcolor('blue');
+    } else if (herfindahlNormalized < .15) {
+        score = 'fair'.fontcolor('yellow');
+    } else if (herfindahlNormalized < .2) {
+        score = 'poor'.fontcolor('red');
+    } else if (herfindahlNormalized < .3) {
+        score = 'very poor'.fontcolor('red');
+    } else {
+        score = 'abysmal'.fontcolor('red');
+    }
+    collaboration.innerHTML = '<b>Collaboration</b>: ' + score;
 
   // Purely cooperative Herfindahl index of n participants
   // This is the lowest possible score
