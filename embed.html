@@ -2,6 +2,7 @@
   <head>
     <title>Dashboard</title>
     <link rel="stylesheet" href="bower_components/materialize/dist/css/materialize.min.css">
+    <link rel="stylesheet" href="bower_components/vis/dist/vis.min.css">
   </head>
   <body>
 
@@ -21,6 +22,7 @@
       <div class="col s6">
         <h2>Followers</h2>
         <pre id="followers">{}</pre>
+        <div style="height: 200px" id="follow-network"></div>
       </div>
       <div class="col s6">
         <h2>Inequality</h2>
@@ -50,6 +52,8 @@
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/materialize/dist/js/materialize.min.js"></script>
     <script src="bower_components/querystring/querystring.min.js"></script>
+    <script src="bower_components/vis/dist/vis.min.js"></script>
+    <script src="bower_components/lodash/lodash.min.js"></script>
     <script src="https://www.google.com/jsapi"></script>
     <script>
       window.module = {exports: {}};

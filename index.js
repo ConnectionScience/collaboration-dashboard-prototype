@@ -103,6 +103,60 @@ var deriveFollowers = function(speaker, prev) {
   showFollowers();
 };
 
+// Redraw the network graph based on the followers
+// TODO: Clean the transforming functions
+var drawNetwork = function() {
+  // Directed network POC
+  // create an array with nodes
+  window.userNodes = window.userNodes || [];
+  window.userNodesOld = window.userNodes || [];
+  window.userEdges = window.userEdges || [];
+  window.userEdgesOld = window.userEdges || [];
+  for (var user in followers) {
+
+    userNodes.push({
+      id: user,
+      label: user
+    });
+    // process the cleaned list of followers
+    var follows = followers[user];
+
+    for (var f in follows) {
+
+      var edge = {
+        from: user,
+        to: f
+      };
+
+      var found = _.find(userEdges, edge);
+
+
+      if (!found) {
+        console.log('updating userEdges', userEdges);
+        userEdges.push(edge);
+
+        var nodes = new vis.DataSet(userNodes);
+
+        // create an array with edges
+        var edges = new vis.DataSet(userEdges);
+
+        // create a network
+        var container = document.getElementById('follow-network');
+        window.networkData = {
+          nodes: nodes,
+          edges: edges
+        };
+
+        var options = {};
+
+        var network = new vis.Network(container, networkData, options);
+
+      }
+    }
+  }
+};
+var i = setInterval(drawNetwork, 8000);
+
 var showReplay = function(talker, prev, time) {
   // console.log('showReplay', talker, time);
   // TODO: this has multiple responsibilities
@@ -247,23 +301,23 @@ var drawInequality = function() {
   normalized.innerHTML = '<b>Normalised Herfindahl Index</b>: ' +
       herfindahlNormalized.toFixed(2);
 
-    var collaboration = document.getElementById('collaboration');
-    var score = 'unknown';
-    // excellent
-    if (herfindahlNormalized < .05) {
-        score = 'excellent'.fontcolor('green');
-    } else if (herfindahlNormalized < .1) {
-        score = 'good'.fontcolor('blue');
-    } else if (herfindahlNormalized < .15) {
-        score = 'fair'.fontcolor('yellow');
-    } else if (herfindahlNormalized < .2) {
-        score = 'poor'.fontcolor('red');
-    } else if (herfindahlNormalized < .3) {
-        score = 'very poor'.fontcolor('red');
-    } else {
-        score = 'abysmal'.fontcolor('red');
-    }
-    collaboration.innerHTML = '<b>Collaboration</b>: ' + score;
+  var collaboration = document.getElementById('collaboration');
+  var score = 'unknown';
+  // excellent
+  if (herfindahlNormalized < .05) {
+    score = 'excellent'.fontcolor('green');
+  } else if (herfindahlNormalized < .1) {
+    score = 'good'.fontcolor('blue');
+  } else if (herfindahlNormalized < .15) {
+    score = 'fair'.fontcolor('yellow');
+  } else if (herfindahlNormalized < .2) {
+    score = 'poor'.fontcolor('red');
+  } else if (herfindahlNormalized < .3) {
+    score = 'very poor'.fontcolor('red');
+  } else {
+    score = 'abysmal'.fontcolor('red');
+  }
+  collaboration.innerHTML = '<b>Collaboration</b>: ' + score;
 
   // Purely cooperative Herfindahl index of n participants
   // This is the lowest possible score
