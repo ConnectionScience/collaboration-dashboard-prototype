@@ -4,6 +4,7 @@
   "description": "This is a test platform for parsing and analyzing the collaboration styles in messaging platforms.",
   "main": "index.js",
   "dependencies": {
+    "lodash": "^3.10.0",
     "stochastic": "0.0.13"
   },
   "devDependencies": {},

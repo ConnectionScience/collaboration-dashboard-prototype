@@ -93,6 +93,15 @@ var followers = {};
 // initial speaker
 var prev = 0;
 
+
+var colorMap = {
+  '0' : 'blue',
+  '1' : 'red',
+  '2' : 'orange',
+  '3' : 'green',
+  '4' : 'purple'
+};
+
 // current list of followers
 var deriveFollowers = function(speaker, prev) {
   var curr = speaker;
@@ -115,8 +124,10 @@ var drawNetwork = function() {
   for (var user in followers) {
 
     userNodes.push({
-      id: user,
-      label: user
+        id: user,
+        label: user,
+        color: colorMap[user]
+
     });
     // process the cleaned list of followers
     var follows = followers[user];
@@ -125,7 +136,9 @@ var drawNetwork = function() {
 
       var edge = {
         from: user,
-        to: f
+        to: f,
+        color: colorMap[user],
+        value: follows[f]
       };
 
       var found = _.find(userEdges, edge);
@@ -308,11 +321,11 @@ var drawInequality = function() {
     score = 'excellent'.fontcolor('green');
   } else if (herfindahlNormalized < .1) {
     score = 'good'.fontcolor('blue');
-  } else if (herfindahlNormalized < .15) {
-    score = 'fair'.fontcolor('yellow');
   } else if (herfindahlNormalized < .2) {
-    score = 'poor'.fontcolor('red');
+    score = 'fair'.fontcolor('yellow');
   } else if (herfindahlNormalized < .3) {
+    score = 'poor'.fontcolor('red');
+  } else if (herfindahlNormalized < .5) {
     score = 'very poor'.fontcolor('red');
   } else {
     score = 'abysmal'.fontcolor('red');
@@ -367,14 +380,6 @@ var drawActivity = function(activity) {
     isStacked: true
   };
   activityChart.draw(data, options);
-};
-
-var colorMap = {
-  '0' : 'blue',
-  '1' : 'red',
-  '2' : 'orange',
-  '3' : 'green',
-  '4' : 'purple'
 };
 
 var showFollowers = function() {
