@@ -117,58 +117,52 @@ var deriveFollowers = function(speaker, prev) {
 var drawNetwork = function() {
   // Directed network POC
   // create an array with nodes
-  window.userNodes = window.userNodes || [];
-  window.userNodesOld = window.userNodes || [];
-  window.userEdges = window.userEdges || [];
-  window.userEdgesOld = window.userEdges || [];
+  window.userNodes = [];
+  window.userEdges = [];
   for (var user in followers) {
+    var node = {
+      id: user,
+      label: 'user' + user,
+      color: colorMap[user] || 'grey',
+      value: distribution[user] || 0
 
-    userNodes.push({
-        id: user,
-        label: user,
-        color: colorMap[user]
-
-    });
+    };
+    userNodes.push(node);
     // process the cleaned list of followers
     var follows = followers[user];
-
     for (var f in follows) {
-
       var edge = {
         from: user,
         to: f,
-        color: colorMap[user],
+        color: colorMap[f] || 'grey',
         value: follows[f]
       };
-
-      var found = _.find(userEdges, edge);
-
-
-      if (!found) {
-        console.log('updating userEdges', userEdges);
-        userEdges.push(edge);
-
-        var nodes = new vis.DataSet(userNodes);
-
-        // create an array with edges
-        var edges = new vis.DataSet(userEdges);
-
-        // create a network
-        var container = document.getElementById('follow-network');
-        window.networkData = {
-          nodes: nodes,
-          edges: edges
-        };
-
-        var options = {};
-
-        var network = new vis.Network(container, networkData, options);
-
-      }
+      userEdges.push(edge);
     }
   }
+
+  var nodes = new vis.DataSet(userNodes);
+  var edges = new vis.DataSet(userEdges);
+
+  // create a network
+  var container = document.getElementById('follow-network');
+  window.networkData = {
+    nodes: nodes,
+    edges: edges
+  };
+  var options = {
+    nodes: {
+      shape: 'dot'
+    }
+  };
+  var network = new vis.Network(container, networkData, options);
 };
-var i = setInterval(drawNetwork, 8000);
+
+setTimeout(function() {
+  drawNetwork();
+  window.drawNetworkInterval = setInterval(drawNetwork, 8000);
+}, 500);
+
 
 var showReplay = function(talker, prev, time) {
   // console.log('showReplay', talker, time);
@@ -178,7 +172,6 @@ var showReplay = function(talker, prev, time) {
   talkers.push(speaker);
   // 3. timeseries
   timeseries[time] = talker;
-
 
   showFollowers();
   showEvents(timeseries);
@@ -273,7 +266,7 @@ var updateTimeseries = function() {
 
   // console.log(activity);
 
-  var distribution = speakers.reduce(function(p, c, i) {
+    window.distribution = speakers.reduce(function(p, c, i) {
     p[c] ? p[c]++ : p[c] = 1;
     return p;
   }, {});
