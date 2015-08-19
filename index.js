@@ -4,6 +4,14 @@ console.log('dashboard-mock');
 window.state = {};
 window.googleLoaded = false;
 
+
+// stdSample: Standard Deviation Sample
+// Create a standard talk time based on 5 second average talk time
+var norm = module.exports.norm; // (mu, sigma, num)
+var normSample = norm(5, 2, 1)[0];
+console.log(normSample);
+
+
 // generateTranstionMatrix(): matrix
 // Create an NxN array with even distribution
 var generateTransitionMatrix = function(n) {
@@ -127,40 +135,49 @@ var drawNetwork = function() {
       value: distribution[user] || 0
 
     };
-    userNodes.push(node);
+    networkNodes.remove({id: user});
+    networkNodes.add(node);
     // process the cleaned list of followers
     var follows = followers[user];
     for (var f in follows) {
       var edge = {
         from: user,
         to: f,
+        //        arrows:'to',
         color: colorMap[f] || 'grey',
-        value: follows[f]
+        value: Math.log(follows[f])
       };
-      userEdges.push(edge);
+      networkEdges.remove({from: user,
+        to: f});
+      networkEdges.add(edge);
     }
   }
 
-  var nodes = new vis.DataSet(userNodes);
-  var edges = new vis.DataSet(userEdges);
+};
+
+setTimeout(function() {
+  networkNodes = new vis.DataSet([]);
+  networkEdges = new vis.DataSet([]);
 
   // create a network
   var container = document.getElementById('follow-network');
   window.networkData = {
-    nodes: nodes,
-    edges: edges
+    nodes: networkNodes,
+    edges: networkEdges
   };
   var options = {
+    layout:{
+      randomSeed: 0
+    },
     nodes: {
       shape: 'dot'
     }
   };
-  var network = new vis.Network(container, networkData, options);
-};
+  window.networkGraph = new vis.Network(container, networkData, options);
 
-setTimeout(function() {
+
   drawNetwork();
-  window.drawNetworkInterval = setInterval(drawNetwork, 8000);
+  window.drawNetworkInterval = setInterval(drawNetwork, 2000);
 }, 500);
 
 
