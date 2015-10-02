@@ -5,6 +5,7 @@ styles in messaging platforms.
 
 # Setup 
 
+    npm install
     bower install
     open index.html
 
