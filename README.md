@@ -3,6 +3,12 @@
 This is a test platform for parsing and analyzing the collaboration
 styles in messaging platforms. 
 
+# Setup 
+
+    bower install
+    open index.html
+
+
 # Data 
 
 The sample data is being pulled from:
